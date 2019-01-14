@@ -1,0 +1,174 @@
+{
+  "keepWaitingPipelines": false,
+  "lastModifiedBy": "anonymous",
+  "limitConcurrent": true,
+  "stages": [
+    {
+      "cloudProvider": "kubernetes",
+      "cloudProviderType": "kubernetes",
+      "cluster": "socialcops-stage",
+      "clusters": [],
+      "credentials": "my-kubernetes-account",
+      "name": "Find Image from Cluster",
+      "namespaces": [
+        "default"
+      ],
+      "onlyEnabled": true,
+      "refId": "1",
+      "requisiteStageRefIds": [],
+      "selectionStrategy": "NEWEST",
+      "type": "findImage"
+    },
+    {
+      "clusters": [
+        {
+          "account": "my-kubernetes-account",
+          "application": "socialcops",
+          "cloudProvider": "kubernetes",
+          "containers": [
+            {
+              "args": [],
+              "command": [],
+              "envFrom": [],
+              "envVars": [],
+              "imageDescription": {
+                "cluster": "socialcops-stage",
+                "fromContext": true,
+                "imageId": "socialcops-stage undefined",
+                "repository": "Find Image from Cluster",
+                "stageId": "1"
+              },
+              "imagePullPolicy": "IFNOTPRESENT",
+              "limits": {},
+              "name": "find-image-from-cluster",
+              "ports": [
+                {
+                  "containerPort": 80,
+                  "name": "http",
+                  "protocol": "TCP"
+                }
+              ],
+              "requests": {},
+              "volumeMounts": []
+            }
+          ],
+          "delayBeforeDisableSec": 0,
+          "delayBeforeScaleDownSec": 0,
+          "deployment": {
+            "deploymentStrategy": {
+              "rollingUpdate": {
+                "maxSurge": 1,
+                "maxUnavailable": 1
+              },
+              "type": "RollingUpdate"
+            },
+            "enabled": false,
+            "minReadySeconds": 0
+          },
+          "dnsPolicy": "ClusterFirst",
+          "initContainers": [],
+          "interestingHealthProviderNames": [
+            "KubernetesContainer",
+            "KubernetesPod"
+          ],
+          "loadBalancers": [
+            "socialcops-prod"
+          ],
+          "maxRemainingAsgs": 2,
+          "namespace": "default",
+          "nodeSelector": {},
+          "podAnnotations": {},
+          "provider": "kubernetes",
+          "region": "default",
+          "replicaSetAnnotations": {},
+          "rollback": {
+            "onFailure": false
+          },
+          "scaleDown": false,
+          "stack": "prod",
+          "strategy": "redblack",
+          "targetSize": 1,
+          "terminationGracePeriodSeconds": 30,
+          "useSourceCapacity": false,
+          "volumeSources": []
+        }
+      ],
+      "name": "Deploy",
+      "refId": "2",
+      "requisiteStageRefIds": [
+        "1"
+      ],
+      "type": "deploy"
+    },
+    {
+      "name": "Wait",
+      "refId": "3",
+      "requisiteStageRefIds": [
+        "2"
+      ],
+      "type": "wait",
+      "waitTime": 5
+    },
+    {
+      "action": "scale_exact",
+      "capacity": {
+        "desired": 0
+      },
+      "cloudProvider": "kubernetes",
+      "cloudProviderType": "kubernetes",
+      "cluster": "socialcops-prod",
+      "credentials": "my-kubernetes-account",
+      "name": "Resize Server Group",
+      "namespaces": [
+        "default"
+      ],
+      "refId": "4",
+      "requisiteStageRefIds": [
+        "3"
+      ],
+      "resizeType": "exact",
+      "target": "ancestor_asg_dynamic",
+      "type": "resizeServerGroup"
+    },
+    {
+      "name": "Wait",
+      "refId": "5",
+      "requisiteStageRefIds": [
+        "4"
+      ],
+      "type": "wait",
+      "waitTime": 30
+    },
+    {
+      "cloudProvider": "kubernetes",
+      "cloudProviderType": "kubernetes",
+      "cluster": "socialcops-prod",
+      "credentials": "my-kubernetes-account",
+      "interestingHealthProviderNames": [
+        "KubernetesService"
+      ],
+      "name": "Destroy Server Group",
+      "namespaces": [
+        "default"
+      ],
+      "refId": "6",
+      "requisiteStageRefIds": [
+        "5"
+      ],
+      "target": "oldest_asg_dynamic",
+      "type": "destroyServerGroup"
+    }
+  ],
+  "triggers": [
+    {
+      "application": "socialcops",
+      "enabled": true,
+      "pipeline": "50a2adb5-b0ae-4c0b-8136-38cc41aff3c2",
+      "status": [
+        "successful"
+      ],
+      "type": "pipeline"
+    }
+  ],
+  "updateTs": "1547476971855"
+}

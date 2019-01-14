@@ -1,0 +1,28 @@
+{
+  "keepWaitingPipelines": false,
+  "lastModifiedBy": "anonymous",
+  "limitConcurrent": true,
+  "stages": [
+    {
+      "failPipeline": true,
+      "judgmentInputs": [],
+      "name": "Manual Judgment",
+      "notifications": [],
+      "refId": "1",
+      "requisiteStageRefIds": [],
+      "type": "manualJudgment"
+    }
+  ],
+  "triggers": [
+    {
+      "application": "socialcops",
+      "enabled": true,
+      "pipeline": "5c26202b-fd83-4836-8e06-94b90cbbdc9d",
+      "status": [
+        "successful"
+      ],
+      "type": "pipeline"
+    }
+  ],
+  "updateTs": "1547481450479"
+}

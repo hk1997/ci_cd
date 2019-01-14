@@ -1,0 +1,97 @@
+{
+  "keepWaitingPipelines": false,
+  "lastModifiedBy": "anonymous",
+  "limitConcurrent": true,
+  "stages": [
+    {
+      "clusters": [
+        {
+          "account": "my-kubernetes-account",
+          "application": "socialcops",
+          "cloudProvider": "kubernetes",
+          "containers": [
+            {
+              "args": [],
+              "command": [],
+              "envFrom": [],
+              "envVars": [],
+              "imageDescription": {
+                "account": "my-gcr-account",
+                "fromTrigger": true,
+                "imageId": "gcr.io/stone-ward-228206/img1 (Tag resolved at runtime)",
+                "registry": "gcr.io",
+                "repository": "stone-ward-228206/img1"
+              },
+              "imagePullPolicy": "IFNOTPRESENT",
+              "limits": {},
+              "name": "stone-ward-228206-img1",
+              "ports": [
+                {
+                  "containerPort": 80,
+                  "name": "http",
+                  "protocol": "TCP"
+                }
+              ],
+              "requests": {},
+              "volumeMounts": []
+            }
+          ],
+          "delayBeforeDisableSec": 0,
+          "delayBeforeScaleDownSec": 0,
+          "deployment": {
+            "deploymentStrategy": {
+              "rollingUpdate": {
+                "maxSurge": 1,
+                "maxUnavailable": 1
+              },
+              "type": "RollingUpdate"
+            },
+            "enabled": false,
+            "minReadySeconds": 0
+          },
+          "dnsPolicy": "ClusterFirst",
+          "initContainers": [],
+          "interestingHealthProviderNames": [
+            "KubernetesContainer",
+            "KubernetesPod"
+          ],
+          "loadBalancers": [
+            "socialcops-stage"
+          ],
+          "maxRemainingAsgs": "4",
+          "namespace": "default",
+          "nodeSelector": {},
+          "podAnnotations": {},
+          "provider": "kubernetes",
+          "region": "default",
+          "replicaSetAnnotations": {},
+          "rollback": {
+            "onFailure": true
+          },
+          "scaleDown": false,
+          "stack": "stage",
+          "strategy": "redblack",
+          "targetSize": 1,
+          "terminationGracePeriodSeconds": 30,
+          "useSourceCapacity": false,
+          "volumeSources": []
+        }
+      ],
+      "name": "Deploy",
+      "refId": "1",
+      "requisiteStageRefIds": [],
+      "type": "deploy"
+    }
+  ],
+  "triggers": [
+    {
+      "account": "my-gcr-account",
+      "enabled": true,
+      "organization": "stone-ward-228206",
+      "registry": "gcr.io",
+      "repository": "stone-ward-228206/img1",
+      "type": "docker"
+    }
+  ],
+  "updateTs": "1547477978606"
+}
