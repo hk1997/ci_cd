@@ -1,9 +1,7 @@
-FROM golang
+FROM nginx
 
-ADD . /go/src/spinnaker.io/demo/k8s-demo
+COPY wrapper.sh /
 
-RUN go install spinnaker.io/demo/k8s-demo
+COPY html /usr/share/nginx/html
 
-ADD ./content /content
-
-ENTRYPOINT /go/bin/k8s-demo
+CMD ["./wrapper.sh"]
